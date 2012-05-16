@@ -1,0 +1,9 @@
+.autotest
+CHANGELOG.md
+Manifest.txt
+README.md
+Rakefile
+Vagrantfile
+lib/vagrant-ansible.rb
+lib/vagrant-ansible/provisioner.rb
+lib/vagrant_init.rb
