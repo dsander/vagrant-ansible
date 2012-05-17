@@ -5,12 +5,13 @@ module Vagrant
     class Ansible < Base
       VERSION = '0.0.1'
       include Util::SafeExec
+
       class Config < Vagrant::Config::Base
         attr_accessor :playbook
-        attr_accessor :pattern
+        attr_accessor :hosts
 
         def initialize
-          @upload_path = "/tmp/vagrant-shell"
+          
         end
 
         def validate(env, errors)
@@ -18,8 +19,8 @@ module Vagrant
           if playbook.nil?
             errors.add(I18n.t("vagrant.provisioners.ansible.no_playbook"))
           end
-          if pattern.nil?
-            errors.add(I18n.t("vagrant.provisioners.ansible.no_pattern"))
+          if hosts.nil?
+            errors.add(I18n.t("vagrant.provisioners.ansible.no_hosts"))
           end
         end
       end
@@ -36,7 +37,7 @@ module Vagrant
             x[:guestport] == ssh.guest_port
           end.first[:hostport]
           file = Tempfile.new('inventory')
-          file.write("[#{config.pattern}]\n")
+          file.write("[#{config.hosts}]\n")
           file.write("#{ssh.host}:#{forward}")
           file.fsync
           file.close
@@ -47,10 +48,7 @@ module Vagrant
       end
 
       def provision!
-        require 'pp'
-
         ssh = env[:vm].config.ssh
-        
  
         with_inventory_file(ssh) do |inventory_file|
           puts ["ansible-playbook",
@@ -64,24 +62,6 @@ module Vagrant
                     "--private-key=#{env[:vm].env.default_private_key_path}",
                     config.playbook)
         end
-=begin
-        with_script_file do |path|
-          # Upload the script to the VM
-          env[:vm].channel.upload(path.to_s, config.upload_path)
-
-          # Execute it with sudo
-          env[:vm].channel.sudo(command) do |type, data|
-            if [:stderr, :stdout].include?(type)
-              # Output the data with the proper color based on the stream.
-              color = type == :stdout ? :green : :red
-
-              # Note: Be sure to chomp the data to avoid the newlines that the
-              # Chef outputs.
-              env[:ui].info(data.chomp, :color => color, :prefix => false)
-            end
-          end
-        end
-=end
       end
     end
   end

@@ -3,7 +3,7 @@ CHANGELOG.md
 Manifest.txt
 README.md
 Rakefile
-Vagrantfile
+Vagrantfile.sample
 lib/vagrant-ansible.rb
 lib/vagrant-ansible/provisioner.rb
 lib/vagrant_init.rb
