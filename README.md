@@ -32,7 +32,7 @@ vagrant-ansible uses [Vagrant](http://vagrantup.com) and thus relies on [Virtual
 
 First install [VirtualBox 4.1.x](https://www.virtualbox.org/wiki/Downloads):
 
-* For [Mac OS X](http://download.virtualbox.org/virtualbox/4.1.14/VirtualBox-4.1.14-77245-OSX.dmg)
+* For [Mac OS X](http://dlc.sun.com.edgesuite.net/virtualbox/4.1.14/VirtualBox-4.1.14-77440-OSX.dmg)
 * For [64-bit Linux distributions](http://download.virtualbox.org/virtualbox/4.1.14/)
 
 Install ansible using the instructions on the ansible [homepage](http://ansible.github.com/gettingstarted.html)
