@@ -1,4 +1,4 @@
-## vagrant-ansible
+## vagrant-ansible [![Build Status](https://secure.travis-ci.org/dsander/vagrant-ansible.png?branch=master)](http://travis-ci.org/dsander/vagrant-ansible)
 
 https://github.com/dsander/vagrant-ansible
 
