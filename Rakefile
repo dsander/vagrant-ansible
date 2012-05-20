@@ -20,4 +20,8 @@ if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'ruby'
     self.extra_deps << ["vagrant"]
   end
 end
+
+task :default => :spec
+task :test => :spec
+
 # vim: syntax=ruby
