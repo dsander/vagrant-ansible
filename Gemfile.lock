@@ -60,6 +60,7 @@ DEPENDENCIES
   hoe-bundler
   hoe-gemspec
   hoe-git
+  rake
   rspec
   rspec-mocks
   simplecov
