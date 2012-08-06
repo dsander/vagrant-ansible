@@ -14,18 +14,18 @@ class Hash
 end
 
 describe "Provisioner" do
-  
+
   let(:e) { Vagrant::Config::ErrorRecorder.new }
-  let(:config) { 
+  let(:config) {
     c = Vagrant::Provisioners::Ansible::Config.new
     c.playbook = "playbook"
     c.hosts    = "hosts"
     c
   }
-  let(:env) { 
-    {:vm  => 
-      {:config => 
-        {:vm => 
+  let(:env) {
+    {:vm  =>
+      {:config =>
+        {:vm =>
           {:forwarded_ports => [{:guestport => 2222, :hostport => 22}]},
          :ssh => {:host => "localhost", :guest_port => 2222, :username => 'sshuser'}
         },
@@ -59,11 +59,22 @@ describe "Provisioner" do
   it "should call ansible-playboot with the right arguments" do
     Tempfile.stub(:new).and_return(filemock)
     provisioner.should_receive(:safe_exec).with(
-          "ansible-playbook", 
-          "--user=sshuser", 
-          "--inventory-file=path", 
-          "--private-key=private_key_path", 
+          "ansible-playbook",
+          "--user=sshuser",
+          "--inventory-file=path",
+          "--private-key=private_key_path",
           "playbook")
+    provisioner.provision!
+  end
+
+  it "should call ansible-playboot with the given inventory file" do
+    config.inventory_file = "/tmp/ansible_hosts"
+    provisioner.should_receive(:safe_exec).with(
+      "ansible-playbook",
+      "--user=sshuser",
+      "--inventory-file=/tmp/ansible_hosts",
+      "--private-key=private_key_path",
+      "playbook")
     provisioner.provision!
   end
 end
