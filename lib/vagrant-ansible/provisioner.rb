@@ -10,6 +10,8 @@ module Vagrant
         attr_accessor :playbook
         attr_accessor :hosts
         attr_accessor :inventory_file
+        attr_accessor :ask_sudo_pass
+        attr_accessor :sudo
 
         def initialize
 
@@ -56,16 +58,17 @@ module Vagrant
         ssh = env[:vm].config.ssh
 
         with_inventory_file(ssh) do |inventory_file|
-          puts ["ansible-playbook",
-                    "--user=#{ssh.username}",
-                    "--inventory-file=#{inventory_file}",
-                    "--private-key=#{env[:vm].env.default_private_key_path}",
-                    config.playbook].join(' ')
-          safe_exec("ansible-playbook",
-                    "--user=#{ssh.username}",
-                    "--inventory-file=#{inventory_file}",
-                    "--private-key=#{env[:vm].env.default_private_key_path}",
-                    config.playbook)
+          options = %W[--user=#{ssh.username}
+                       --inventory-file=#{inventory_file}
+                       --private-key=#{env[:vm].env.default_private_key_path}]
+
+          options << "--ask-sudo-pass" if config.ask_sudo_pass
+          options << "--sudo" if config.sudo
+
+          cmd = (%w(ansible-playbook) << options << config.playbook).join(' ')
+
+          puts cmd
+          safe_exec cmd
         end
       end
     end
