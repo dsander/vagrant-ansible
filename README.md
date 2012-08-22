@@ -71,6 +71,8 @@ You will notice that the VM is automatically created, and nginx-ubuntu playbook 
 
 Have a look at your Vagrantfile, it will look like this:
 
+    require 'vagrant-ansible'
+    
     Vagrant::Config.run do |config|
       config.vm.box     = "oneiric32_base"
       config.vm.box_url = "http://files.travis-ci.org/boxes/bases/oneiric32_base.box"
