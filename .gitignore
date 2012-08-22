@@ -2,3 +2,4 @@ coverage
 .vagrant
 Vagrantfile
 pkg
+.idea/
