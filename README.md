@@ -44,6 +44,10 @@ Then install the vagrant gem:
 Then install the vagrant-ansible gem:
 
     gem install vagrant-ansible
+    
+If you installed vagrant using a package from [vagrant homepage](http://downloads.vagrantup.com/) you have to install vagrant-asible via the vagrant command:
+
+    vagrant gem install vagrant-ansible
 
 Create a playbook or just clone an existing repository:
 
