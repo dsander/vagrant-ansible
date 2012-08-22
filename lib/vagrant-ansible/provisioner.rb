@@ -14,7 +14,7 @@ module Vagrant
         attr_accessor :sudo
 
         def initialize
-
+          @options = []
         end
 
         def validate(env, errors)
@@ -25,6 +25,19 @@ module Vagrant
           if hosts.nil? and inventory_file.nil?
             errors.add(I18n.t("vagrant.provisioners.ansible.no_hosts"))
           end
+        end
+
+        # Allows for assigning one to many options to pass to ansible-playbook.
+        def options=(*opts)
+          @options = if opts.is_a? String
+            [opts]
+          else
+            opts
+          end
+        end
+
+        def options
+          @options
         end
       end
 
@@ -64,6 +77,7 @@ module Vagrant
 
           options << "--ask-sudo-pass" if config.ask_sudo_pass
           options << "--sudo" if config.sudo
+          options = options + config.options unless config.options.empty?
 
           cmd = (%w(ansible-playbook) << options << config.playbook).flatten
 
