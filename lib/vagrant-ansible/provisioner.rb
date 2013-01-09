@@ -55,9 +55,15 @@ module Vagrant
             forward = env[:vm].config.vm.forwarded_ports.select do |x|
               x[:guestport] == ssh.guest_port
             end.first[:hostport]
+            if not config.hosts.kind_of?(Array)
+              config.hosts = [config.hosts]
+            end
             file = Tempfile.new('inventory')
-            file.write("[#{config.hosts}]\n")
-            file.write("#{ssh.host}:#{forward}")
+            config.hosts.each do |host|
+              file.write("[#{host}]\n")
+              file.write("#{ssh.host}:#{forward}\n")
+              file.write("\n")
+            end
             file.fsync
             file.close
             yield file.path
