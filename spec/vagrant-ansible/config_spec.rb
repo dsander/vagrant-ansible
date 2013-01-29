@@ -17,5 +17,12 @@ describe "Config" do
       config.validate({}, e)
       e.errors.length.should == 0
     end
+
+    it "should not add any errors if the hosts is an array" do
+      config.playbook = "test"
+      config.hosts    = ["webservers", "databases"]
+      config.validate({}, e)
+      e.errors.length.should == 0
+    end
   end
 end

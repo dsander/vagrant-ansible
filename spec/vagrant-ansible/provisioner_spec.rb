@@ -15,6 +15,7 @@ end
 
 describe "Provisioner" do
 
+  # Vagrant config for a single host
   let(:e) { Vagrant::Config::ErrorRecorder.new }
   let(:config) {
     c = Vagrant::Provisioners::Ansible::Config.new
@@ -37,7 +38,8 @@ describe "Provisioner" do
   let(:filemock) {
     filemock = double(:tempfile)
     filemock.should_receive(:write).with("[#{config.hosts}]\n")
-    filemock.should_receive(:write).with("localhost:22")
+    filemock.should_receive(:write).with("localhost:22\n")
+    filemock.should_receive(:write).with("\n")
     filemock.should_receive(:fsync)
     filemock.should_receive(:close)
     filemock.should_receive(:path).and_return("path")
@@ -49,7 +51,7 @@ describe "Provisioner" do
     Vagrant::Provisioners::Ansible.config_class.should == Vagrant::Provisioners::Ansible::Config
   end
 
-  it "should write the correct inventory to a temp file" do
+  it "should write the correct inventory to a temp file for a single host" do
     Tempfile.stub(:new).and_return(filemock)
     provisioner.with_inventory_file({:host => "localhost", :guest_port => 2222}) do |path|
       path.should == "path"
@@ -77,4 +79,46 @@ describe "Provisioner" do
       "playbook")
     provisioner.provision!
   end
+
+  # Vagrant config for multiple hosts
+  let(:multiple_hosts_config) {
+    c = Vagrant::Provisioners::Ansible::Config.new
+    c.playbook = "playbook"
+    c.hosts    = ["host1", "host2"]
+    c
+  }
+  let(:multiple_hosts_env) {
+    {:vm  =>
+      {:config =>
+        {:vm =>
+          {:forwarded_ports => [{:guestport => 2222, :hostport => 22}]},
+         :ssh => {:host => "localhost", :guest_port => 2222, :username => 'sshuser'}
+        },
+        :env => {:default_private_key_path => "private_key_path"}
+      }
+    }
+  }
+  let(:multiple_hosts_provisioner) { Vagrant::Provisioners::Ansible.new(multiple_hosts_env, multiple_hosts_config) }
+  let(:multiple_hosts_filemock) {
+    filemock = double(:multiple_hosts_tempfile)
+    filemock.should_receive(:write).with("[#{multiple_hosts_config.hosts[0]}]\n")
+    filemock.should_receive(:write).with("localhost:22\n")
+    filemock.should_receive(:write).with("\n")
+    filemock.should_receive(:write).with("[#{multiple_hosts_config.hosts[1]}]\n")
+    filemock.should_receive(:write).with("localhost:22\n")
+    filemock.should_receive(:write).with("\n")
+    filemock.should_receive(:fsync)
+    filemock.should_receive(:close)
+    filemock.should_receive(:path).and_return("path")
+    filemock.should_receive(:unlink)
+    filemock
+  }
+
+  it "should write the correct inventory to a temp file for multiple hosts" do
+    Tempfile.stub(:new).and_return(multiple_hosts_filemock)
+    multiple_hosts_provisioner.with_inventory_file({:host => "localhost", :guest_port => 2222}) do |path|
+      path.should == "path"
+    end
+  end
+
 end
