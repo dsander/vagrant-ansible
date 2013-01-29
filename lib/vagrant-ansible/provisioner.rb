@@ -3,7 +3,7 @@ require 'tempfile'
 module Vagrant
   module Provisioners
     class Ansible < Base
-      VERSION = '0.0.4'
+      VERSION = '0.0.5'
       include Util::SafeExec
 
       class Config < Vagrant::Config::Base
