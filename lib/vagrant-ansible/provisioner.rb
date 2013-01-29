@@ -87,7 +87,6 @@ module Vagrant
 
           cmd = (%w(ansible-playbook) << options << config.playbook).flatten
 
-          puts cmd
           safe_exec *cmd
         end
       end
