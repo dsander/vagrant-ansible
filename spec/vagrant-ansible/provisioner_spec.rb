@@ -80,6 +80,21 @@ describe "Provisioner" do
     provisioner.provision!
   end
 
+  it "should pass multiple extra-vars", :focus =>true do
+    config.inventory_file = "/tmp/ansible_hosts"
+    config.options  = '--extra-vars="user=vagrant test=true"', '-vv'
+    provisioner = Vagrant::Provisioners::Ansible.new(env, config)
+    provisioner.should_receive(:safe_exec).with(
+      "ansible-playbook",
+      "--user=sshuser",
+      "--inventory-file=/tmp/ansible_hosts",
+      "--private-key=private_key_path",
+      '--extra-vars="user=vagrant test=true"',
+      '-vv',
+      "playbook")
+    provisioner.provision!
+  end
+
   # Vagrant config for multiple hosts
   let(:multiple_hosts_config) {
     c = Vagrant::Provisioners::Ansible::Config.new
