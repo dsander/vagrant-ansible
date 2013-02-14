@@ -58,14 +58,6 @@ Now change into the ansible-playbooks directory and download the example Vagrant
     cd ansible-playbooks
     wget https://raw.github.com/dsander/vagrant-ansible/master/Vagrantfile.sample -O Vagrantfile
     
-Before you can run your playbook for the first time, you have to change the remote user to 'vagrant' in your playbook. This is necessary because the user specified in the playbook can not be overridden via command line options.
-
-    ....
-    - hosts: web-servers
-      user: vagrant
-    .....
-
-
 Create a 32-bit Ubuntu virtual machine you will be developing playbooks in:
 
     vagrant up 

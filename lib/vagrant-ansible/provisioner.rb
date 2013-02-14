@@ -61,7 +61,7 @@ module Vagrant
             file = Tempfile.new('inventory')
             config.hosts.each do |host|
               file.write("[#{host}]\n")
-              file.write("#{ssh.host}:#{forward}\n")
+              file.write("#{ssh.host}:#{forward} ansible_ssh_user=#{ssh.username}\n")
               file.write("\n")
             end
             file.fsync
