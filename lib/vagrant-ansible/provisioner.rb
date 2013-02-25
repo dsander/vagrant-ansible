@@ -12,6 +12,7 @@ module Vagrant
         attr_accessor :inventory_file
         attr_accessor :ask_sudo_pass
         attr_accessor :sudo
+        attr_accessor :hostname
 
         def initialize
           @options = []
@@ -61,7 +62,10 @@ module Vagrant
             file = Tempfile.new('inventory')
             config.hosts.each do |host|
               file.write("[#{host}]\n")
-              file.write("#{ssh.host}:#{forward}\n")
+              hostline = config.hostname ? 
+                          "#{config.hostname} ansible_ssh_host=#{ssh.host} ansible_ssh_port=#{forward}\n" : 
+                          "#{ssh.host}:#{forward}\n"
+              file.write(hostline)
               file.write("\n")
             end
             file.fsync
