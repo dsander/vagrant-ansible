@@ -2,4 +2,4 @@
 
 # DEPRECATED
 
-As ansible support now is build in vagrant itself this plugin is now DEPRECATED, have a look at the official [documentation](http://docs.vagrantup.com/v2/provisioning/ansible.html) on how to use it.
+As ansible support now is build into vagrant itself this plugin is now DEPRECATED, have a look at the official [documentation](http://docs.vagrantup.com/v2/provisioning/ansible.html) on how to use it.
